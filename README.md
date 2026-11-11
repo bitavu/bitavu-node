@@ -87,9 +87,9 @@ const { exampleJson, inputReview, studioUrl } =
 
 A request uses a deadline of two minutes by default. The caller controls retries. For the same render, reuse the operation ID with the same template, revision selection, and data. Respect `retryAfterMs` if returned. Use a new operation ID for a different render.
 
-## Next.js
+## Node.js and Next.js guide
 
-Follow the [Next.js invoice guide](https://github.com/bitavu/bitavu-node/blob/main/examples/nextjs-invoice/README.md) to generate and download an invoice PDF from an App Router Route Handler.
+Follow the [Bitavu Node.js and Next.js guide](https://bitavu.com/support/nodejs) to generate an invoice PDF with the Node.js client and return it as a download from a Next.js App Router Route Handler.
 
 ## License
 
