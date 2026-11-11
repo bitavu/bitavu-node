@@ -4,9 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       package_sha256:
-        description: SHA-256 of the approved npm tarball
-        required: true
+        description: SHA-256 of the approved npm tarball (required for staging)
         type: string
+      verify_only:
+        description: Check npm authentication without staging a package
+        type: boolean
+        default: false
 
 permissions: {}
 
@@ -39,7 +42,34 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run check:package
+      - name: Verify npm trusted publishing
+        if: ${{ inputs.verify_only }}
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const tokenURL = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
+          tokenURL.searchParams.set('audience', 'npm:registry.npmjs.org');
+          const github = await fetch(tokenURL, {
+            headers: { Authorization: 'Bearer ' + process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN },
+            redirect: 'error',
+            signal: AbortSignal.timeout(15000),
+          });
+          if (!github.ok) throw new Error('GitHub OIDC request failed with HTTP ' + github.status);
+          const { value: identity } = await github.json();
+          if (!identity) throw new Error('GitHub returned no OIDC identity.');
+
+          const registry = await fetch('https://registry.npmjs.org/-/npm/v1/oidc/token/exchange/package/%40bitavu%2Fclient', {
+            method: 'POST',
+            headers: { Authorization: 'Bearer ' + identity },
+            redirect: 'error',
+            signal: AbortSignal.timeout(15000),
+          });
+          if (registry.status !== 201) throw new Error('npm OIDC exchange failed with HTTP ' + registry.status);
+          await registry.body?.cancel();
+          console.log('npm accepted the GitHub Actions identity for @bitavu/client.');
+          NODE
       - name: Stage the reviewed tarball
+        if: ${{ !inputs.verify_only }}
         shell: bash
         env:
           APPROVED_SHA256: ${{ inputs.package_sha256 }}
