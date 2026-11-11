@@ -1,0 +1,53 @@
+name: Stage npm release
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_sha256:
+        description: SHA-256 of the approved npm tarball
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: npm-release
+  cancel-in-progress: false
+
+jobs:
+  stage:
+    if: >-
+      github.repository == 'bitavu/bitavu-node' &&
+      github.ref == 'refs/heads/main' &&
+      github.actor == 'muveaio' &&
+      github.triggering_actor == 'muveaio'
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+          registry-url: https://registry.npmjs.org
+      - run: npm install --global npm@11.21.2
+      - run: npm ci
+      - run: npm test
+      - run: npm run check:package
+      - name: Stage the reviewed tarball
+        shell: bash
+        env:
+          APPROVED_SHA256: ${{ inputs.package_sha256 }}
+        run: |
+          set -euo pipefail
+          [[ "$APPROVED_SHA256" =~ ^[a-f0-9]{64}$ ]]
+          shopt -s nullglob
+          packages=(artifacts/*.tgz)
+          [[ ${#packages[@]} -eq 1 ]]
+          printf '%s  %s\n' "$APPROVED_SHA256" "${packages[0]}" | sha256sum --check
+          npm stage publish "${packages[0]}" --access public

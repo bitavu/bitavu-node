@@ -1,0 +1,39 @@
+{
+  "name": "@bitavu/client",
+  "version": "0.1.0",
+  "description": "Generate PDFs from Bitavu templates and JSON with a typed Node.js client.",
+  "license": "MIT",
+  "author": "Bitavu",
+  "homepage": "https://bitavu.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitavu/bitavu-node.git"
+  },
+  "keywords": ["bitavu", "pdf", "pdf-generation", "invoice", "templates", "typescript"],
+  "type": "module",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "node": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "engines": {
+    "node": "^22.13.0 || ^24.0.0 || >=26.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test",
+    "prepack": "npm run build",
+    "check:package": "npm run build && node scripts/check-package.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/node": "22.19.19"
+  }
+}

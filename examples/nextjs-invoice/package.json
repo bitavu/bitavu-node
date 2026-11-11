@@ -1,0 +1,23 @@
+{
+  "name": "bitavu-nextjs-invoice",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1 --port 3030",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1 --port 3030"
+  },
+  "dependencies": {
+    "@bitavu/client": "file:../..",
+    "next": "16.4.6",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "server-only": "0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "5.9.3"
+  }
+}

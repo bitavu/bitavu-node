@@ -1,0 +1,11 @@
+node_modules/
+dist/
+artifacts/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+*.tgz
+*.pdf
+.env*
+!.env.example
+.npmrc
