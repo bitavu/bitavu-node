@@ -1,9 +1,9 @@
 {
   "name": "@bitavu/client",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Generate PDFs from saved Bitavu visual templates and workflow data",
   "license": "MIT",
-  "author": {"name":"bitavu.com","email":"integration+n8n@bitavu.com","url":"https://bitavu.com"},
+  "author": {"name":"bitavu.com","email":"integration+npm@bitavu.com","url":"https://bitavu.com"},
   "homepage": "https://bitavu.com",
   "repository": {
     "type": "git",
