@@ -1,6 +1,6 @@
 # Bitavu for Node.js
 
-Generate PDF invoices, reports, and other documents from a saved Bitavu template and JSON data. The client includes TypeScript declarations and runs on Node.js 22.13 or newer in the Node.js 22, 24, and 26 release lines. It has no runtime dependencies.
+Generate PDF invoices, reports, and other documents from a saved [Bitavu](https://bitavu.com) template and JSON data. The client includes TypeScript declarations and runs on Node.js 22.13 or newer in the Node.js 22, 24, and 26 release lines. It has no runtime dependencies.
 
 ```sh
 npm install @bitavu/client
